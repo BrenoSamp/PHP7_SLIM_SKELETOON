@@ -2,6 +2,8 @@
 declare(strict_types=1);
 
 use App\Application\Actions\User\ListUsersAction;
+use App\Application\Actions\User\PersonAction;
+use App\Application\Actions\User\ViewPersonAction;
 use App\Application\Actions\User\ViewUserAction;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -24,7 +26,12 @@ return function (App $app) {
         $group->get('/{id}', ViewUserAction::class);
     });
 
-    $container = $app->getContainer();
+    $app->group('/people', function (Group $group) {
+        $group->get('', PersonAction::class);
+        $group->get('/{id}', ViewPersonAction::class);
+    });
+
+    
 
     // $container['views'] = function ($container) {
     //     $views = new \Slim\views\Twig('path/to/templates', [

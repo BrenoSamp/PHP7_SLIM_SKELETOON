@@ -39,15 +39,14 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema db_ecommerce
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `db_ecommerce` ;
-USE `db_ecommerce` ;
+USE `slim` ;
 
 -- -----------------------------------------------------
--- Table `tb_persons`
+-- Table `tb_people`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `tb_persons` ;
+DROP TABLE IF EXISTS `tb_people` ;
 
-CREATE TABLE IF NOT EXISTS `tb_persons` (
+CREATE TABLE IF NOT EXISTS `tb_people` (
   `idperson` INT(11) NOT NULL AUTO_INCREMENT,
   `desperson` VARCHAR(64) NOT NULL,
   `desemail` VARCHAR(128) NULL DEFAULT NULL,
@@ -57,6 +56,18 @@ CREATE TABLE IF NOT EXISTS `tb_persons` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
+
+INSERT INTO tb_people(
+    idperson,
+    desperson,
+    desemail,
+    nrphone,
+    dtregister
+)VALUES(100,'brenim','bsampaio8@hotmail.com','997326590','2011-03-12'),
+(200,'marciao','marcio@hotmail.com','997326590','2011-03-12'),
+(300,'tandy','tandy@hotmail.com','997326590','2011-03-12'),
+(400,'fernando','fernando@hotmail.com','997326590','2011-03-12'),
+(500,'billyns','billyns@hotmail.com','997326590','2011-03-12');
 
 
 -- -----------------------------------------------------
