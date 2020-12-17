@@ -1,0 +1,38 @@
+version: '3.1'
+
+volumes:
+    slim-example-data:
+        driver: local
+
+services:
+    mysql:
+        image: mysql:5.7.22
+        container_name: slim-example-sql
+        environment:
+            - MYSQL_DATABASE=slim
+            - MYSQL_USER=slim
+            - MYSQL_PASSWORD=slim
+            - MYSQL_ROOT_PASSWORD=slim
+            - TZ=America/Sao_Paulo
+        volumes:
+            - slim-example-data:/var/lib/mysql
+        working_dir: /srv/vhosts/phpApp
+        ports:
+            - 13307:3306
+
+    php-nginx:
+        # image: ambientum/php:7.3-nginx
+        image: marciodojr/ambientum-php:7.3-nginx
+        container_name: slim-example-php
+        environment:
+            - XDEBUG_ENABLED=true
+            - MYSQL_DATABASE=slim
+            - MYSQL_HOST=mysql
+            - MYSQL_USER=slim
+            - MYSQL_PASSWORD=slim
+        volumes:
+            - .:/var/www/app
+        ports:
+            - 8888:8080
+        depends_on:
+            - mysql
