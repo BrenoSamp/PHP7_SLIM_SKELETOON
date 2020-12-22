@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `tb_addresses` (
   PRIMARY KEY (`idaddress`),
   CONSTRAINT `fk_addresses_persons`
     FOREIGN KEY (`idperson`)
-    REFERENCES `tb_persons` (`idperson`)
+    REFERENCES `tb_people` (`idperson`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -99,27 +99,62 @@ CREATE INDEX `fk_addresses_persons_idx` ON `tb_addresses` (`idperson` ASC) VISIB
 
 -- -----------------------------------------------------
 -- Table `tb_users`
+
 -- -----------------------------------------------------
+
+
+
 DROP TABLE IF EXISTS `tb_users` ;
 
 CREATE TABLE IF NOT EXISTS `tb_users` (
   `iduser` INT(11) NOT NULL AUTO_INCREMENT,
   `idperson` INT(11) NOT NULL,
-  `deslogin` VARCHAR(64) NOT NULL,
+  `deslogin` VARCHAR(64) NOT NULL ,
   `despassword` VARCHAR(256) NOT NULL,
-  `inadmin` TINYINT(4) NOT NULL DEFAULT '0',
+  `inadmin` TINYINT(4) NOT NULL ,
   `dtregister` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`iduser`),
   CONSTRAINT `fk_users_persons`
     FOREIGN KEY (`idperson`)
-    REFERENCES `tb_persons` (`idperson`)
+    REFERENCES `tb_people` (`idperson`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
-CREATE INDEX `FK_users_persons_idx` ON `tb_users` (`idperson` ASC) VISIBLE;
+DELIMITER ;;
+CREATE PROCEDURE `sp_users_save`(
+pdesperson VARCHAR(64), 
+pdeslogin VARCHAR(64), 
+pdespassword VARCHAR(256), 
+pdesemail VARCHAR(128), 
+pnrphone BIGINT, 
+pinadmin TINYINT 
+)
+BEGIN
+  
+    DECLARE vidperson INT;
+    
+    INSERT INTO tb_people (desperson, desemail, nrphone)
+    VALUES(pdesperson, pdesemail, pnrphone);
+    
+    SET vidperson = LAST_INSERT_ID();
+    
+    INSERT INTO tb_users (idperson, deslogin, despassword, inadmin)
+    VALUES(vidperson, pdeslogin, pdespassword, pinadmin);
+    
+    SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = LAST_INSERT_ID();
+    
+END ;;
+DELIMITER ;
+
+
+
+
+CREATE INDEX `FK_users_persons_idx` ON `tb_users` (`idperson` ASC);
+
+
 
 
 -- -----------------------------------------------------

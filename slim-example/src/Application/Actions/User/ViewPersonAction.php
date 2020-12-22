@@ -12,7 +12,7 @@ class ViewPersonAction extends PersonAction
      */
     protected function action(): Response
     {
-        $personId = (int) $this->resolveArg('id');
+        $personId = (int) $this->resolveArg('idperson');
         $person = $this->databasePeopleRepository->findUserOfId($personId);
 
         $this->logger->info("User of id `${personId}` was viewed.");

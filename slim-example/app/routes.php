@@ -1,8 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\PersonAction;
+use App\Application\Actions\User\AdminAction;
+use App\Application\Actions\User\ViewAdminAction;
 use App\Application\Actions\User\ViewPersonAction;
 use App\Application\Actions\User\ViewUserAction;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -17,7 +20,7 @@ return function (App $app) {
     });
 
     $app->get('/', function (Request $request, Response $response) {
-        $response->getBody()->write('Hello world!');
+        $response->getBody()->write('Hello world!, Você vai aprender PHP !!!!!!');
         return $response;
     });
 
@@ -28,17 +31,14 @@ return function (App $app) {
 
     $app->group('/people', function (Group $group) {
         $group->get('', PersonAction::class);
-        $group->get('/{id}', ViewPersonAction::class);
+        $group->get('/{idperson}', ViewPersonAction::class);
     });
 
-    
-
-    // $container['views'] = function ($container) {
-    //     $views = new \Slim\views\Twig('path/to/templates', [
-    //         'cache' => 'path/to/cache'
-    //     ]);
-    // }
-
-
-
+    $app->group('/admin', function (Group $group) {
+        $group->get('', ViewAdminAction::class);
+        $group->post('/forgot',ViewAdminAction::class);
+        $group->post('/users/create', ViewAdminAction::class);
+        $group->post('/login', AdminAction::class);
+        $group->get('/users/{iduser}', ViewAdminAction::class);
+    });
 };
