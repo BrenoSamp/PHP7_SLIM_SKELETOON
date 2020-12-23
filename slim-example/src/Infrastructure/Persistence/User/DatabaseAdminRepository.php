@@ -35,12 +35,12 @@ class DatabaseAdminRepository implements NewUserRepository
     public function findUserOfId($iduser): array
     {
 
-        $stmt = $this->sql->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser',[
+        $stmt = $this->sql->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser', [
             ":iduser" => $iduser
         ]);
 
         $admin = $stmt->fetch();
-                
+
         return $admin;
     }
 
@@ -49,8 +49,8 @@ class DatabaseAdminRepository implements NewUserRepository
      */
     public function login(string $login, string $password)
     {
-        $stmt = $this->sql->query("SELECT * FROM tb_users a INNER JOIN tb_people b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN",[
-			":LOGIN"  => $login
+        $stmt = $this->sql->query("SELECT * FROM tb_users a INNER JOIN tb_people b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN", [
+            ":LOGIN"  => $login
         ]);
 
         $admin = $stmt->fetch();
@@ -75,15 +75,31 @@ class DatabaseAdminRepository implements NewUserRepository
         }
     }
 
-    // public function get($iduser)
-    // {
-    //     $stmt = $this->sql->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser', [
-    //         ":iduser" => $iduser
-    //     ]);
+    public function getForgot($email)
+    {
+        $stmt = $this->sql->query('SELECT * FROM tb_people a INNER JOIN tb_users b USING(idperson) WHERE a.desemail = :email;', [
+            ":email" => $email
+        ]);
 
-    //     $data = $stmt->fetch();
-    //     return $data['desperson'];
-    // }
+        $admin = $stmt->fetch();
+
+        if (!$admin) {
+            throw new UserNotFoundException();
+        } else {
+            $stmt2 = $this->sql->query("CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", [
+                ":iduser" => $admin["iduser"],
+                ":desip" => $_SERVER["REMOTE_ADDR"]
+            ]);
+            if (!$stmt2->fetch()) {
+                throw new UserNotFoundException();
+            } else {
+                $dataRecovery = $stmt2->fetch();
+                $dataRecovery['idrecovery'] = password_hash($dataRecovery['idrecovery'], PASSWORD_DEFAULT, [
+                    "cost" => 12
+                ]);
+            }
+        }
+    }
 
     public function save($admin)
     {
@@ -104,10 +120,10 @@ class DatabaseAdminRepository implements NewUserRepository
         return $admin;
     }
 
-    public function update($admin,$iduser)
+    public function update($admin, $iduser)
     {
         $stmt = $this->sql->query("CALL sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword,:desemail,:nrphone,:inadmin)", [
-            ":iduser"=>$iduser,
+            ":iduser" => $iduser,
             ":desperson" => $admin['desperson'],
             ":deslogin" => $admin['deslogin'],
             ":despassword" => $admin['despassword'],
@@ -123,10 +139,10 @@ class DatabaseAdminRepository implements NewUserRepository
     }
 
 
-    public function delete($iduser){
-        $this->sql->query('CALL sp_users_delete(:iduser)',[
-            ":iduser"=> $iduser
+    public function delete($iduser)
+    {
+        $this->sql->query('CALL sp_users_delete(:iduser)', [
+            ":iduser" => $iduser
         ]);
-
     }
 }

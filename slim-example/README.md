@@ -63,4 +63,8 @@ docker exec -it slim-example-sql bash -c "mysql -u slim -p'slim' slim"
 ```
 
 
+## EXECUTAR TESTES 
+
+```bash
 vendor/bin/phpunit --filter testViewPersonAction
+```

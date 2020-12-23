@@ -38,4 +38,20 @@ class ViewPersonActionTest extends TestCase
 
         $this->assertEquals($serializedPayload, $payload);
     }
+
+    public function testViewPersonActionPostman()
+    {
+        $app = $this->getAppInstance();
+
+        $person = new Person('200', 'marciao', 'marcio@hotmail.com', '997326590', '2011-03-12 00:00:00');
+          
+        $request = $this->createRequest('GET', '/people/200');
+        $response = $app->handle($request);
+
+        $payload = (string) $response->getBody();
+        $expectedPayload = new ActionPayload(200, $person);
+        $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
+
+        $this->assertEquals($serializedPayload, $payload);
+    }
 }

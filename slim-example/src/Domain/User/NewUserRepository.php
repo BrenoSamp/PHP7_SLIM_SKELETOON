@@ -22,6 +22,7 @@ interface NewUserRepository
 
     public function login(string $login, string $password);
     public function update($admin,$iduser);
+    public function getForgot($email);
     public function delete($iduser);
     public function save($admin);
 
