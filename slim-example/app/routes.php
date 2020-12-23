@@ -3,8 +3,11 @@
 declare(strict_types=1);
 
 use App\Application\Actions\User\ListUsersAction;
+use App\Application\Actions\User\ListAdminAction;
 use App\Application\Actions\User\PersonAction;
 use App\Application\Actions\User\AdminAction;
+use App\Application\Actions\User\CreateAdminAction;
+use App\Application\Actions\User\DeleteAdminAction;
 use App\Application\Actions\User\ViewAdminAction;
 use App\Application\Actions\User\ViewPersonAction;
 use App\Application\Actions\User\ViewUserAction;
@@ -35,10 +38,11 @@ return function (App $app) {
     });
 
     $app->group('/admin', function (Group $group) {
-        $group->get('', ViewAdminAction::class);
-        $group->post('/forgot',ViewAdminAction::class);
-        $group->post('/users/create', ViewAdminAction::class);
+        $group->post('/create', CreateAdminAction::class)->setName('C');
+        $group->get('/list', ListAdminAction::class)->setName('R');
+        $group->post('/list/{iduser}', ViewAdminAction::class)->setName('U');
+        $group->get('/delete/{iduser}',DeleteAdminAction::class)->setName('D');
         $group->post('/login', AdminAction::class);
-        $group->get('/users/{iduser}', ViewAdminAction::class);
+        
     });
 };

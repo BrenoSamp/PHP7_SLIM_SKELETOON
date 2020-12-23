@@ -123,6 +123,9 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 2
 DEFAULT CHARACTER SET = utf8;
 
+
+DROP PROCEDURE IF EXISTS `sp_users_save`;
+
 DELIMITER ;;
 CREATE PROCEDURE `sp_users_save`(
 pdesperson VARCHAR(64), 
@@ -149,11 +152,70 @@ BEGIN
 END ;;
 DELIMITER ;
 
-
-
-
 CREATE INDEX `FK_users_persons_idx` ON `tb_users` (`idperson` ASC);
 
+
+
+DROP PROCEDURE IF EXISTS `sp_usersupdate_save`;
+
+DELIMITER ;;
+CREATE PROCEDURE `sp_usersupdate_save`(
+  piduser INT,
+  pdesperson VARCHAR(64),
+  pdeslogin VARCHAR(64),
+  pdespassword VARCHAR(256),
+  pdesemail VARCHAR(128),
+  pnrphone BIGINT,
+  pinadmin TINYINT
+)
+BEGIN
+
+    DECLARE vidperson INT;
+
+    SELECT idperson INTO vidperson
+    FROM tb_users
+    WHERE iduser = piduser;
+
+    UPDATE tb_people 
+    SET
+      desperson = pdesperson,
+      desemail = pdesemail,
+      nrphone = pnrphone
+    WHERE idperson = vidperson;
+
+    UPDATE tb_users 
+    SET
+      deslogin = pdeslogin,
+      despassword = pdespassword,
+      inadmin = pinadmin
+    WHERE idperson = vidperson;
+ 
+    SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = piduser;
+END ;;
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS `sp_users_delete`;
+
+DELIMITER $$
+CREATE PROCEDURE `sp_users_delete`(
+piduser INT
+)
+BEGIN
+
+    DECLARE vidperson INT;
+
+
+    SELECT idperson INTO vidperson
+    FROM tb_users WHERE
+    iduser = piduser;
+
+    
+    DELETE FROM tb_users WHERE iduser = piduser;
+    DELETE FROM tb_people WHERE idperson = vidperson;
+
+END$$
+DELIMITER ;
 
 
 

@@ -13,9 +13,18 @@ class ViewAdminAction extends AdminAction
      */
     protected function action(): Response
     {
-        
-        $admin = $this->request->getParsedBody();
-        $adminData = $this->databaseAdminRepository->save($admin);
-        return $this->respondWithData($adminData);
+        $iduser = (int) $this->resolveArg('iduser');
+
+        $admin = $this->databaseAdminRepository->findUserOfId($iduser);
+
+        $this->respondWithData($admin);
+
+        $this->logger->info("Users list was viewed.");
+
+        $adminResponse = $this->request->getParsedBody();
+
+        $adminUpdate = $this->databaseAdminRepository->update($adminResponse,$iduser);
+
+        return $this->respondWithData($adminUpdate);
     }
 }

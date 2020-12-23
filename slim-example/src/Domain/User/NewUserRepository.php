@@ -7,10 +7,10 @@ namespace App\Domain\User;
 interface NewUserRepository
 {
     /**
-     * @return User[]
+     * 
      */
     public function findAll(): array;
-
+    public function findUserOfId($iduser): array;
     /**
      * @param int $id
      * @return User
@@ -21,7 +21,8 @@ interface NewUserRepository
 
 
     public function login(string $login, string $password);
-    public function get($iduser);
+    public function update($admin,$iduser);
+    public function delete($iduser);
     public function save($admin);
 
 }
