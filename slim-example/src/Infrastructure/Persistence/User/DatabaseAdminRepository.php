@@ -49,28 +49,21 @@ class DatabaseAdminRepository implements NewUserRepository
      */
     public function login(string $login, string $password)
     {
-        $stmt = $this->sql->query("SELECT * FROM tb_users a INNER JOIN tb_people b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN", [
-            ":LOGIN"  => $login
-        ]);
+        $stmt = $this->sql->query("SELECT * FROM tb_users a JOIN tb_people b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN",
+            [
+                ":LOGIN"  => $login
+            ]
+        );
 
         $admin = $stmt->fetch();
-
 
         if (!$admin) {
             throw new UserNotFoundException();
         }
 
-
-        $admin['despassword'] = password_hash($admin['despassword'], PASSWORD_DEFAULT, [
-            "cost" => 12
-        ]);
-
-
         if (password_verify($password, $admin["despassword"])) {
-            $admin["desperson"] = utf8_encode($admin["desperson"]);
             return $admin;
         } else {
-
             throw new UserNotFoundException('Usuário ou senha Inválida');
         }
     }

@@ -37,7 +37,7 @@ class DatabasePeopleRepositoryTest extends TestCase
 
         $databasePeopleRepository = new DatabasePeopleRepository($sql->reveal());
 
-        
+
 
 
 
@@ -57,16 +57,15 @@ class DatabasePeopleRepositoryTest extends TestCase
     //     $this->assertEquals(array_values($person), $peopleRepository->findAll());
     // }
 
-    public function testDatabasePeopleFindUserOfId()
+    public function testDatabasePeopleRepositoryFindUserOfId()
     {
-
-
         $data = [
             'idperson' => 200,
             'desperson' => 'marciao',
-            'desemail' =>'marcio@hotmail.com',
-            'nrphone' =>'997326590',
+            'desemail' => 'marcio@hotmail.com',
+            'nrphone' => '997326590',
             'dtregister' => '2011-03-12 00:00:00'
+
         ];
 
         $stmt = $this->prophesize(PDOStatement::class);
@@ -77,18 +76,17 @@ class DatabasePeopleRepositoryTest extends TestCase
 
         $sql = $this->prophesize(Sql::class);
         $sql
-            ->query('SELECT * FROM tb_people WHERE idperson = 200')
+            ->query('SELECT * FROM tb_people WHERE idperson = :id',[
+                'id' => 200
+            ])
             ->willReturn($stmt->reveal())
             ->shouldBeCalledOnce();
-         
+
         $databasePersonRepository = new DatabasePeopleRepository($sql->reveal());
 
-        $person =  new Person('200', 'marciao', 'marcio@hotmail.com', '997326590', '2011-03-12 00:00:00');
+        $person = new Person($data['idperson'],$data['desperson'],$data['desemail'],$data['nrphone'],$data['dtregister']);
 
-
-
-
-        $this->assertEquals($person, $databasePersonRepository->findUserOfId(200));
+        $this->assertEquals($person,$databasePersonRepository->findUserOfId(200));
     }
 
     // public function testFindUserOfIdThrowsNotFoundException()

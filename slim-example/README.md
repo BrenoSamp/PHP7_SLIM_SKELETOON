@@ -66,5 +66,11 @@ docker exec -it slim-example-sql bash -c "mysql -u slim -p'slim' slim"
 ## EXECUTAR TESTES 
 
 ```bash
-vendor/bin/phpunit --filter testViewPersonAction
+vendor/bin/phpunit --filter <method-name>
+```
+
+## COMANDOS PHP
+### EXEMPLO VAR DUMP
+```bash
+php -r "var_dump(password_hash('5678',PASSWORD_DEFAULT,['cost'=>12]));"
 ```
