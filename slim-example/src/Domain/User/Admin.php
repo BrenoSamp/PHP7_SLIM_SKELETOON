@@ -29,7 +29,7 @@ class Admin implements JsonSerializable
      * @return array
      */
 
-    public function __construct(int $iduser,int $idperson, string $deslogin, string $despassword, string $inadmin, $dtregister)
+    public function __construct(int $iduser,int $idperson, string $deslogin, string $despassword, string $inadmin,string $dtregister)
     {
         $this->iduser = $iduser;
         $this->idperson = $idperson;

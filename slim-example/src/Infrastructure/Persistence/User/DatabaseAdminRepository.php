@@ -35,7 +35,7 @@ class DatabaseAdminRepository implements NewUserRepository
     public function findUserOfId($iduser): array
     {
 
-        $stmt = $this->sql->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser', [
+        $stmt = $this->sql->query('SELECT * FROM tb_users a JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser', [
             ":iduser" => $iduser
         ]);
 
@@ -49,7 +49,8 @@ class DatabaseAdminRepository implements NewUserRepository
      */
     public function login(string $login, string $password)
     {
-        $stmt = $this->sql->query("SELECT * FROM tb_users a JOIN tb_people b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN",
+        $stmt = $this->sql->query(
+            "SELECT * FROM tb_users a JOIN tb_people b ON a.idperson = b.idperson WHERE a.deslogin = :LOGIN",
             [
                 ":LOGIN"  => $login
             ]
@@ -58,7 +59,7 @@ class DatabaseAdminRepository implements NewUserRepository
         $admin = $stmt->fetch();
 
         if (!$admin) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException('Usuário não existe');
         }
 
         if (password_verify($password, $admin["despassword"])) {

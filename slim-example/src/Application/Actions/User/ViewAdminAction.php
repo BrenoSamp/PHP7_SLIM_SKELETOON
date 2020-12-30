@@ -15,16 +15,16 @@ class ViewAdminAction extends AdminAction
     {
         $iduser = (int) $this->resolveArg('iduser');
 
-        $admin = $this->databaseAdminRepository->findUserOfId($iduser);
+        // $admin = $this->databaseAdminRepository->findUserOfId($iduser);
 
-        $this->respondWithData($admin);
+        // $this->respondWithData($admin);
 
         $this->logger->info("Users list was viewed.");
 
         $adminResponse = $this->request->getParsedBody();
 
-        $adminUpdate = $this->databaseAdminRepository->update($adminResponse,$iduser);
+        $adminUpdated = $this->databaseAdminRepository->update($adminResponse,$iduser);
 
-        return $this->respondWithData($adminUpdate);
+        return $this->respondWithData($adminUpdated);
     }
 }
