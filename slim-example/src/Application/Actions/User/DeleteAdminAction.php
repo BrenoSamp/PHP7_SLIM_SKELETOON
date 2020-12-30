@@ -15,8 +15,8 @@ class DeleteAdminAction extends AdminAction
     {
         $iduser = (int) $this->resolveArg('iduser');
 
-        $adminUpdate = $this->databaseAdminRepository->delete($iduser);
+        $adminDeleted = $this->databaseAdminRepository->delete($iduser);
 
-        return $this->respondWithData($adminUpdate);
+        return $this->respondWithData($adminDeleted);
     }
 }

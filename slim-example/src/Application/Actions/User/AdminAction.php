@@ -19,7 +19,7 @@ class AdminAction extends Action
 
     /**
      * @param LoggerInterface $logger
-     * @param DatabaseAdminRepository  $PersonAction
+     * @param DatabaseAdminRepository  
      */
     public function __construct(LoggerInterface $logger, DatabaseAdminRepository $databaseAdminRepository)
     {
@@ -30,7 +30,7 @@ class AdminAction extends Action
     protected function action(): Response
     {
         $admin = $this->request->getParsedBody();
-        $adminData = $this->databaseAdminRepository->login((string) $admin['deslogin'],(string) $admin['despassword']);
+        $adminData = $this->databaseAdminRepository->login((string) $admin['deslogin'], (string) $admin['despassword']);
         return $this->respondWithData($adminData);
     }
 }

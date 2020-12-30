@@ -23,7 +23,7 @@ class ViewAdminAction extends AdminAction
 
         $adminResponse = $this->request->getParsedBody();
 
-        $adminUpdated = $this->databaseAdminRepository->update($adminResponse,$iduser);
+        $adminUpdated = $this->databaseAdminRepository->update($adminResponse, $iduser);
 
         return $this->respondWithData($adminUpdated);
     }

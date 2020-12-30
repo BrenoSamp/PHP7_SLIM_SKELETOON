@@ -29,7 +29,7 @@ class DatabaseAdminRepositoryTest extends TestCase
 
         $sql =  $this->prophesize(Sql::class);
         $sql
-            ->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) ORDER BY b.desperson')
+            ->query('SELECT * FROM tb_users a JOIN tb_people b USING(idperson) ORDER BY b.desperson')
             ->willReturn($stmt->reveal())
             ->shouldBeCalledOnce();
 
@@ -51,14 +51,13 @@ class DatabaseAdminRepositoryTest extends TestCase
         ];
 
         $stmt = $this->prophesize(PDOStatement::class);
-        $stmt
-            ->fetch()
+        $stmt->fetch()
             ->willReturn($data)
             ->shouldBeCalledOnce();
 
         $sql = $this->prophesize(Sql::class);
         $sql
-            ->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser', [
+            ->query('SELECT * FROM tb_users a JOIN tb_people b USING(idperson) WHERE a.iduser = :iduser', [
                 ':iduser' => 19
             ])
             ->willReturn($stmt->reveal())
@@ -184,7 +183,7 @@ class DatabaseAdminRepositoryTest extends TestCase
 
     public function testDatabaseAdminRepositoryDelete()
     {
-        $iduser = 19;
+        $iduser = 22;
 
         $sql =  $this->prophesize(Sql::class);
         $sql
@@ -197,14 +196,6 @@ class DatabaseAdminRepositoryTest extends TestCase
         $databaseAdminRepository = new DatabaseAdminRepository($sql->reveal());
 
         $databaseAdminRepository->delete($iduser);
+        
     }
-
-
-
-    // public function testFindUserOfIdThrowsNotFoundException()
-    // {
-    //     $userRepository = new InMemoryUserRepository([]);
-    //     $this->expectException(UserNotFoundException::class);
-    //     $userRepository->findUserOfId(1);
-    // }
 }

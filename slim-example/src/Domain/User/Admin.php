@@ -29,7 +29,7 @@ class Admin implements JsonSerializable
      * @return array
      */
 
-    public function __construct(int $iduser,int $idperson, string $deslogin, string $despassword, string $inadmin,string $dtregister)
+    public function __construct(int $iduser, int $idperson, string $deslogin, string $despassword, int $inadmin, string $dtregister)
     {
         $this->iduser = $iduser;
         $this->idperson = $idperson;
@@ -39,13 +39,17 @@ class Admin implements JsonSerializable
         $this->dtregister = $dtregister;
     }
 
+
+    /**
+     * @return int
+     */
     public function getIduser()
     {
 
         return $this->iduser;
     }
     /**
-     * @return string
+     * @return int
      */
     public function getIdperson()
     {
@@ -67,6 +71,8 @@ class Admin implements JsonSerializable
     {
         return $this->despassword;
     }
+
+
     public function getInadmin()
     {
         return $this->inadmin;

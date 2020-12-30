@@ -27,7 +27,7 @@ class DatabaseAdminRepository implements NewUserRepository
 
     public function findAll(): array
     {
-        $stmt = $this->sql->query('SELECT * FROM tb_users a INNER JOIN tb_people b USING(idperson) ORDER BY b.desperson');
+        $stmt = $this->sql->query('SELECT * FROM tb_users a JOIN tb_people b USING(idperson) ORDER BY b.desperson');
 
         return $stmt->fetchAll();
     }
@@ -95,6 +95,7 @@ class DatabaseAdminRepository implements NewUserRepository
         }
     }
 
+
     public function save($admin)
     {
 
@@ -113,6 +114,7 @@ class DatabaseAdminRepository implements NewUserRepository
 
         return $admin;
     }
+
 
     public function update($admin, $iduser)
     {

@@ -11,42 +11,30 @@ use App\Infrastructure\Persistence\User\DatabaseAdminRepository;
 use DI\Container;
 use Tests\TestCase;
 
-class ViewAdminActionTest extends TestCase
+class ListAdminActionTest extends TestCase
 {
-    public function testViewAdminAction()
+    public function testListAdminAction()
     {
         $app = $this->getAppInstance();
 
         /** @var Container $container */
         $container = $app->getContainer();
-
-        $iduser = 19;
-
-
-        $newData = [
-            "iduser" => $iduser,
-            "desperson" => 'breno_teste',
-            "deslogin" => 'teste',
-            "despassword" => 'teste123',
-            "desemail" => 'emailteste@email.com',
-            "nrphone" => '992546960',
-            "inadmin" => 1
-        ];
+        
+        $data = [];
 
         $adminRepositoryProphecy = $this->prophesize(DatabaseAdminRepository::class);
         $adminRepositoryProphecy
-            ->update($newData, $iduser)
-            ->willReturn($newData)
+            ->findAll()
+            ->willReturn($data)
             ->shouldBeCalledOnce();
 
         $container->set(DatabaseAdminRepository::class, $adminRepositoryProphecy->reveal());
 
-        $req = $this->createRequest('POST', '/admin/list/19',);
-        $request = $req->withParsedBody($newData);
+        $request = $this->createRequest('GET', '/admin/list');
         $response = $app->handle($request);
 
         $payload = (string) $response->getBody();
-        $expectedPayload = new ActionPayload(200, $newData);
+        $expectedPayload = new ActionPayload(200, $data);
         $serializedPayload = json_encode($expectedPayload, JSON_PRETTY_PRINT);
 
         $this->assertEquals($serializedPayload, $payload);
