@@ -11,7 +11,7 @@ use App\Infrastructure\Persistence\User\DatabaseAdminRepository;
 use DI\Container;
 use Tests\TestCase;
 
-class ViewAdminActionTest extends TestCase
+class EditAdminActionTest extends TestCase
 {
     public function testViewAdminAction()
     {

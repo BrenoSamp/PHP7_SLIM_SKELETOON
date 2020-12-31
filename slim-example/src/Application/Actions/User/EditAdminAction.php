@@ -6,7 +6,7 @@ namespace App\Application\Actions\User;
 
 use Psr\Http\Message\ResponseInterface as Response;
 
-class ViewAdminAction extends AdminAction
+class EditAdminAction extends AdminAction
 {
     /**
      * {@inheritdoc}

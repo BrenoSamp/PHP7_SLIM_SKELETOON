@@ -7,8 +7,10 @@ use App\Application\Actions\User\ListAdminAction;
 use App\Application\Actions\User\PersonAction;
 use App\Application\Actions\User\AdminAction;
 use App\Application\Actions\User\AdminForgotAction;
+use App\Application\Actions\User\AdminResetPwAction;
 use App\Application\Actions\User\CreateAdminAction;
 use App\Application\Actions\User\DeleteAdminAction;
+use App\Application\Actions\User\EditAdminAction;
 use App\Application\Actions\User\ViewAdminAction;
 use App\Application\Actions\User\ViewPersonAction;
 use App\Application\Actions\User\ViewUserAction;
@@ -41,10 +43,13 @@ return function (App $app) {
     $app->group('/admin', function (Group $group) {
         $group->post('/create', CreateAdminAction::class)->setName('C');
         $group->get('/list', ListAdminAction::class)->setName('R');
-        $group->post('/list/{iduser}', ViewAdminAction::class)->setName('U');
+        $group->post('/list/{iduser}', EditAdminAction::class)->setName('U');
         $group->get('/delete/{iduser}',DeleteAdminAction::class)->setName('D');
         $group->post('/login', AdminAction::class);
         $group->post('/login/forgot', AdminForgotAction::class);
+        $group->post('/reset/{idrecovery}', AdminResetPwAction::class);
+        
+        
         
     });
 };

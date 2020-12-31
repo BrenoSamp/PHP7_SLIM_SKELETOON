@@ -441,6 +441,31 @@ DEFAULT CHARACTER SET = utf8;
 
 CREATE INDEX `fk_userspasswordsrecoveries_users_idx` ON `tb_userspasswordsrecoveries` (`iduser` ASC) VISIBLE;
 
+DELIMITER $$
+CREATE PROCEDURE `sp_userspasswordsrecoveries_create`(
+piduser INT,
+pdesip VARCHAR(45)
+)
+BEGIN
+	
+	INSERT INTO tb_userspasswordsrecoveries (iduser, desip)
+    VALUES(piduser, pdesip);
+    
+    SELECT * FROM tb_userspasswordsrecoveries
+    WHERE idrecovery = LAST_INSERT_ID();
+    
+END$$
+DELIMITER ;
+
+SELECT * FROM tb_userspasswordsrecoveries a
+JOIN tb_users b USING(iduser)
+JOIN tb_people c USING(idperson)
+WHERE
+    a.idecovery = 2
+    AND
+    a.dtrecovery IS NULL
+    AND
+    DATE_ADD(a.dtregister, INTERVAL 1 SECOND) >= NOW();
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

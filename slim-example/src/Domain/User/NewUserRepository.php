@@ -8,9 +8,9 @@ interface NewUserRepository
 {
     public function findAll(): array;
     public function findUserOfId($iduser): array;
-    public function login(string $login, string $password);
-    public function update($admin, $iduser);
+    public function login(string $login, string $password): array;
+    public function update(array $admin,int $iduser): array;
     public function getForgot(string $email,string $userIp);
-    public function delete($iduser);
-    public function save($admin);
+    public function delete(int $iduser);
+    public function save(array $admin): array;
 }

@@ -18,13 +18,10 @@ class Mailer
 
 
 
-    /**
-     * @return array
-     */
 
-    public function __construct($toAddress, $toName, $subject)
+
+    public function __construct(string $toAddress,string $toName,string $subject, string $code)
     {     
-        // $html = $email;
         $this->mail = new PHPMailer();
 
         //Tell PHPMailer to use SMTP
@@ -34,10 +31,9 @@ class Mailer
         // 0 = off (for production use)
         // 1 = client messages
         // 2 = client and server messages
-        $this->mail->SMTPDebug = 0;
+        $this->mail->SMTPDebug = 1;
 
         //Ask for HTML-friendly debug output
-        $this->mail->Debugoutput = 'html';
 
         //Set the hostname of the mail server
         $this->mail->Host = 'smtp.gmail.com';
@@ -74,7 +70,7 @@ class Mailer
 
         //Read an HTML message body from an external file, convert referenced images to embedded,
         //convert HTML into a basic plain-text alternative body
-        //$this->mail->msgHTML($html);
+        $this->mail->Body = 'Dear' . ' ' . Mailer::NAME_FROM . ' ' . 'Your recovery code is: ' . $code;
 
         //Replace the plain text body with one created manually
         $this->mail->AltBody = 'This is a plain-text message body';
