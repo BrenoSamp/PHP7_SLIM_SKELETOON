@@ -6,6 +6,7 @@ use App\Application\Actions\User\ListUsersAction;
 use App\Application\Actions\User\ListAdminAction;
 use App\Application\Actions\User\PersonAction;
 use App\Application\Actions\User\AdminAction;
+use App\Application\Actions\User\AdminForgotAction;
 use App\Application\Actions\User\CreateAdminAction;
 use App\Application\Actions\User\DeleteAdminAction;
 use App\Application\Actions\User\ViewAdminAction;
@@ -43,6 +44,7 @@ return function (App $app) {
         $group->post('/list/{iduser}', ViewAdminAction::class)->setName('U');
         $group->get('/delete/{iduser}',DeleteAdminAction::class)->setName('D');
         $group->post('/login', AdminAction::class);
+        $group->post('/login/forgot', AdminForgotAction::class);
         
     });
 };

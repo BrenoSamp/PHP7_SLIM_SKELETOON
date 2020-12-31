@@ -10,7 +10,7 @@ interface NewUserRepository
     public function findUserOfId($iduser): array;
     public function login(string $login, string $password);
     public function update($admin, $iduser);
-    public function getForgot($email);
+    public function getForgot(string $email,string $userIp);
     public function delete($iduser);
     public function save($admin);
 }

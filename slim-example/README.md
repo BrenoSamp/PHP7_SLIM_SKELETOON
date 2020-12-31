@@ -70,7 +70,20 @@ vendor/bin/phpunit --filter <method-name>
 ```
 
 ## COMANDOS PHP
+
 ### EXEMPLO VAR DUMP
 ```bash
 php -r "var_dump(password_hash('5678',PASSWORD_DEFAULT,['cost'=>12]));"
+```
+
+
+## Code Coverage
+### Code Coverage Report
+```bash
+vendor/bin/phpunit --testdox
+```
+### PHP UNIT XML CFG
+```xml
+<log type="coverage-text" target="php://stdout" lowUpperBound="35" highLowerBound="70"/>
+<log type="coverage-html" target="./var/docs" lowUpperBound="35" highLowerBound="70"/>
 ```

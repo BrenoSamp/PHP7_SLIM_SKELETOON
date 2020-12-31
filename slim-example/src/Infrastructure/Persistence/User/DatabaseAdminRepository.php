@@ -6,6 +6,7 @@ namespace App\Infrastructure\Persistence\User;
 
 use App\Database\Sql;
 use App\Domain\User\Admin;
+use App\Domain\User\Mailer;
 use App\Domain\User\NewUserRepository;
 use App\Domain\User\Person;
 use App\Domain\User\User;
@@ -69,30 +70,29 @@ class DatabaseAdminRepository implements NewUserRepository
         }
     }
 
-    public function getForgot($email)
+    public function getForgot(string $email, string $userIp)
     {
-        $stmt = $this->sql->query('SELECT * FROM tb_people a INNER JOIN tb_users b USING(idperson) WHERE a.desemail = :email;', [
+        $stmt = $this->sql->query('SELECT * FROM tb_people a JOIN tb_users b USING(idperson) WHERE a.desemail = :email', [
             ":email" => $email
         ]);
 
-        $admin = $stmt->fetch();
+        $user = $stmt->fetch();
 
-        if (!$admin) {
-            throw new UserNotFoundException();
-        } else {
-            $stmt2 = $this->sql->query("CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", [
-                ":iduser" => $admin["iduser"],
-                ":desip" => $_SERVER["REMOTE_ADDR"]
-            ]);
-            if (!$stmt2->fetch()) {
-                throw new UserNotFoundException();
-            } else {
-                $dataRecovery = $stmt2->fetch();
-                $dataRecovery['idrecovery'] = password_hash($dataRecovery['idrecovery'], PASSWORD_DEFAULT, [
-                    "cost" => 12
-                ]);
-            }
-        }
+        $stmt2 = $this->sql->query("CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", [
+            ":iduser" => $user['iduser'],
+            ":desip" => $userIp
+        ]);
+
+        $dataRecovery = $stmt2->fetch();
+        $dataRecovery['idrecovery'] = password_hash($dataRecovery['idrecovery'], PASSWORD_DEFAULT, [
+            "cost" => 12
+        ]);
+
+        $mailer = new Mailer($user['desemail'], $user['desperson'], "Redefinição de Senha");
+
+        $mailer->send();
+
+        return $user;
     }
 
 
